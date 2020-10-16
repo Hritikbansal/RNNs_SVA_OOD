@@ -33,8 +33,6 @@ parser.add_argument('--augment_test', action='store_true', default=False,
 					help='augment testing set!!! ')
 parser.add_argument('--domain_adaption', action='store_true', default=False,
 					help='use domain adaptation for final testing!!! ')
-parser.add_argument('--ood', action='store_true', default=False,
-					help='OOD Dataset-- Linzen 18 !!! ')
 parser.add_argument('--act_attention', action='store_true', default=False,
 					help='use contrastive train set for testing!!! ')
 parser.add_argument('--verb_embedding', action='store_true', default=False,
@@ -50,7 +48,7 @@ if fullGram:
 	pvn = FullGramSentence(args.model, filenames.deps, embedding_size=args.embedding_size, hidden_size=args.hidden_size, output_size=2, num_layers=args.num_layers, prop_train=args.prop_train, output_filename='output_log.txt')
 
 	if train:
-		pvn.pipeline(True,train_bsz=args.bsz, test_bsz= 4096, model="decay_fullGram.pkl", load_data=True,load=False,num_epochs=args.epochs, model_prefix='decay_fullGram', 
+		pvn.pipeline(True, train_bsz=args.bsz, test_bsz= 4096, model="decay_fullGram.pkl", load_data=True,load=False,num_epochs=args.epochs, model_prefix='decay_fullGram', 
 					data_name='fullGram', test_size=args.validation_size, lr=0.01, annealing=True,act_attention=args.act_attention,domain_adaption=args.domain_adaption,
 					ood=args.ood, augment_train=args.augment_train, augment_test=args.augment_test)
 	else:	

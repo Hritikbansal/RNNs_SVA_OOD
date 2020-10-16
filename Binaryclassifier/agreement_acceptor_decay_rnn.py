@@ -245,7 +245,7 @@ class RNNAcceptor(DECAY_RNN_Model):
 			if(domain_adaption):
 				ind = []
 				for i in range(n_train,len(deps)):
-					if(deps[i]['n_diff_intervening']>1):
+					if(deps[i]['n_diff_intervening']>0):
 				 		ind.append(i)
 				ind = np.array(ind)
 				print('length of validation set: '+str(len(ind)))
@@ -260,7 +260,7 @@ class RNNAcceptor(DECAY_RNN_Model):
 			if(domain_adaption):
 				ind = []
 				for i in range(int(0.95*len(deps)), len(deps)):
-					if(deps[i]['n_diff_intervening']<2):
+					if(deps[i]['n_diff_intervening']<1):
 						ind.append(i)
 				ind = np.array(ind)
 				print('length of test set: '+str(len(ind)))

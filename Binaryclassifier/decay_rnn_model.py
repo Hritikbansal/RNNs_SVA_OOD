@@ -450,12 +450,6 @@ class DECAY_RNN_Model(object):
 			assert len(x_sentences) == len(x) == len(y), "assert failed! length of sentences is different from length of actual testing sentence per template per sing/plur"
 		return final_dict_testing
 
-##########################################################
-####  AUTHOR @GANTAVYA BHATT #############################
-##########################################################
-
-
-
 	def pipeline(self, train, train_bsz =128, test_bsz=32,load = False, model = '', test_size=7000, model_prefix='_', num_epochs=20, load_data=False, save_data=False, test_linzen_template_pvn=False, linzen_template_filename=None, 
 				train_size=None, data_name='Not', lr=0.001, annealing=False, nheads=1, activation='relu', act_attention=False, max_attn=False, use_hidden=False, K=5, L=1, train_tagger=False, compare_models=False, m1=None, m2=None, domain_adaption = False, 
 				test_demarcated=False, demarcate_train=False, ood=False, augment_train=True, augment_test=True, augment_ratio=1, verb_embedding=False):
@@ -667,15 +661,8 @@ class DECAY_RNN_Model(object):
 					avg_prob =  float(avg_prob*tot + j[1])/float(tot+1)
 					tot+=1
 					self.attn_dist[j[0]] = (avg_prob, tot)
-					# self.per_loc_probab_dist[j[0]].append(j[1])
 				else:
 					self.attn_dist[j[0]] = (j[1], 1)
-					# self.per_loc_probab_dist[j[0]]=[j[1]]
-			# if flag:
-			# 	self.specific.append((attention_weights[i], input_len[i]))
-
-
-			# at this step the dictionary is updated for each example! 
 
 	def compare_models(self, m1,  m2):
 		# to compare the accuracies of 2 models and log where the 2 are producing different outputs.
@@ -755,8 +742,7 @@ class DECAY_RNN_Model(object):
 				if not self.train and (self.act_attention or self.max_attn):
 					self.update_attn_dict(attention_weights, verb_loc_test, x_test)
 					counter+=1
-				# if counter%30 ==0 :
-				# 	print("{}/{}".format(counter, len(self.Test_DataGenerator)))
+	
 
 		# dump distributions!! 
 		if not self.train and (self.act_attention or self.max_attn) :

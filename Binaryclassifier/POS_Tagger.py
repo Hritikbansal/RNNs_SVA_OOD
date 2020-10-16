@@ -1,5 +1,4 @@
 from decay_rnn import DECAY_RNN 
-from decay_rnn_v2 import GATED_DECAY_RNN
 from slacked import SDRNN
 from ablation import ABDRNN
 from ordered_neuron import ONLSTM
@@ -67,9 +66,7 @@ class Agreement_model(nn.Module):
 		elif self.rnn_arch == "RNN":
 			self.recurrent_layer = nn.RNN(self.embedding_size, self.hidden_size, self.num_layers, dropout= self.dropout)
 		elif self.rnn_arch == "DECAY":	
-			self.recurrent_layer = DECAY_RNN(self.embedding_size, self.hidden_size, self.num_layers, dropout= self.dropout, activation=self.activation)
-		elif self.rnn_arch =='GDRNN':
-			self.recurrent_layer = GATED_DECAY_RNN(self.embedding_size, self.hidden_size, self.num_layers, dropout= self.dropout, activation=self.activation)			
+			self.recurrent_layer = DECAY_RNN(self.embedding_size, self.hidden_size, self.num_layers, dropout= self.dropout, activation=self.activation)		
 		elif self.rnn_arch == 'ONLSTM':
 			self.recurrent_layer = ONLSTM(self.embedding_size, self.hidden_size, self.num_layers, dropout=self.dropout)
 		elif self.rnn_arch == 'SDRNN':
