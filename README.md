@@ -17,8 +17,8 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 
 ## Dataset
 
-- We used the annotated dataset provided by (Linzen et al. 2016)[https://github.com/TalLinzen/rnn_agreement] which consists of sentences scrapped from Wikipedia.
-- For Targeted Syntactic Evaluation, templates are available (here)[https://drive.google.com/file/d/13Q_zUz5fZxYwGuo_-ZbS20HHUkZEHPzl/view] OR you can refer to (Marvin and Linzen 2018)[https://github.com/BeckyMarvin/LM_syneval/tree/master/EMNLP2018/templates] repo.
+- We used the annotated dataset provided by [Linzen et al. 2016](https://github.com/TalLinzen/rnn_agreement) which consists of sentences scrapped from Wikipedia.
+- For Targeted Syntactic Evaluation, templates are available [here](https://drive.google.com/file/d/13Q_zUz5fZxYwGuo_-ZbS20HHUkZEHPzl/view) OR you can refer to [Marvin and Linzen 2018](https://github.com/BeckyMarvin/LM_syneval/tree/master/EMNLP2018/templates) repo.
 
 
 ## Experiments
