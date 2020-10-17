@@ -33,6 +33,8 @@ parser.add_argument('--augment_test', action='store_true', default=False,
 					help='augment testing set!!! ')
 parser.add_argument('--domain_adaption', action='store_true', default=False,
 					help='use domain adaptation for final testing!!! ')
+parser.add_argument('--ood', action='store_true', default=False,
+					help='OOD Dataset-- Linzen 18 !!! ')
 parser.add_argument('--act_attention', action='store_true', default=False,
 					help='use contrastive train set for testing!!! ')
 parser.add_argument('--verb_embedding', action='store_true', default=False,
