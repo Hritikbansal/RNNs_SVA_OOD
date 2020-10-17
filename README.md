@@ -26,3 +26,12 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 Broadly speaking, we train our models on two set of objectives - Grammaticality Judgement and Language Modeling. 
 Hence, we divide our repo into two subparts solely dedicated to these objectives separately.
 
+If you find our work useful, then please consider citing us using:
+```
+@article{bansal2020trained,
+author = {Hritik Bansal and Gantavya Bhatt and Sumeet Agarwal},
+title = {Can RNNs trained on harder subject-verb agreement instances still perform well on easier ones?},
+year = {2020},
+journal = {arXiv:2010.04976},
+}
+```
