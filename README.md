@@ -1,4 +1,4 @@
-# RNNs_SVA_OOD
+# RNN Subject Verb Agreement Out of Distribution Generalization Analysis
 
 This is an official pytorch implementation for the experiments described in the paper - [Can RNNs trained on harder subject-verb agreement instances still
 perform well on easier ones?](https://arxiv.org/pdf/2010.04976.pdf)
