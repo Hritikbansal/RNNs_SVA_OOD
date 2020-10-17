@@ -1,4 +1,4 @@
-# RNNs_SVA_OOD
+# RNN Subject Verb Agreement Out of Distribution Generalization Analysis
 
 This is an official pytorch implementation for the experiments described in the paper - [Can RNNs trained on harder subject-verb agreement instances still
 perform well on easier ones?](https://arxiv.org/pdf/2010.04976.pdf)
@@ -17,8 +17,9 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 
 ## Dataset
 
-- We used the annotated dataset provided by [Linzen et al. 2016](https://github.com/TalLinzen/rnn_agreement) which consists of sentences scrapped from Wikipedia.
-- For Targeted Syntactic Evaluation, templates are available [here](https://drive.google.com/file/d/13Q_zUz5fZxYwGuo_-ZbS20HHUkZEHPzl/view) OR you can refer to [Marvin and Linzen 2018](https://github.com/BeckyMarvin/LM_syneval/tree/master/EMNLP2018/templates) repo.
+- The data used in this paper is taken Linzen et al. 2016 [paper](https://arxiv.org/abs/1611.01368). This can either be downloaded from [here](http://tallinzen.net/media/rnn_agreement/agr_50_mostcommon_10K.tsv.gz) or alternatively, this can also be downloaded using the script ``` download_data.sh``` (mentioned in the Language Model folder) using ```./download_data.sh```. 
+- For TSE data, please look Language model folder. 
+
 
 
 ## Experiments
@@ -26,3 +27,12 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 Broadly speaking, we train our models on two set of objectives - Grammaticality Judgement and Language Modeling. 
 Hence, we divide our repo into two subparts solely dedicated to these objectives separately.
 
+If you find our work useful, then please consider citing us using:
+```
+@article{bansal2020trained,
+author = {Hritik Bansal and Gantavya Bhatt and Sumeet Agarwal},
+title = {Can RNNs trained on harder subject-verb agreement instances still perform well on easier ones?},
+year = {2020},
+journal = {arXiv:2010.04976},
+}
+```
