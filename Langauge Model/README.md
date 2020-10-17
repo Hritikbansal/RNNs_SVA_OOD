@@ -1,7 +1,4 @@
 # Code for understanding behavior of LM on different data
-## Requirements
-- Python 3
-- PyTorch 0.4
 
 ## Data
 The data used in this paper is taken Linzen et al. 2016 [paper](https://arxiv.org/abs/1611.01368). This can either be downloaded from [here](http://tallinzen.net/media/rnn_agreement/agr_50_mostcommon_10K.tsv.gz) or alternatively, this can also be downloaded using the script ``` download_data.sh``` using ```./download_data.sh```. 
