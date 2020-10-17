@@ -56,12 +56,3 @@ Details of all the arguments is present in ```run.py```.
 * We had performed new experiments pertaining to POS tagging as well, but those won't be needed to replicate results from the paper. They are just additional codes which have been integrated here in case you want to try new experiments.
 * Please raise issues in case you are getting some unexpected behaviour or in case something seems to be missing, we would be happy to help.
 
-If you find our work useful, then please consider citing us using:
-```
-@article{bansal2020trained,
-author = {Hritik Bansal and Gantavya Bhatt and Sumeet Agarwal},
-title = {Can RNNs trained on harder subject-verb agreement instances still perform well on easier ones?},
-year = {2020},
-journal = {arXiv:2010.04976},
-}
-```
