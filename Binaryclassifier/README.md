@@ -10,12 +10,10 @@ Network classes are implemented in pytorch.
 
 We consider 4 RNN models in our work.
 
-* Vanilla RNN
 * LSTM
 * GRU
 * [ONLSTM](https://arxiv.org/abs/1810.09536) - Ordered Neuron LSTM
 * [DRNN](https://arxiv.org/abs/2005.08199) - Decay RNN 
-* Other variants of DRNN like SDRNN and AbDRNN
 
 ## Usage
 
