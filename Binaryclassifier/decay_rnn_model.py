@@ -339,7 +339,7 @@ class DECAY_RNN_Model(object):
 		self.model = self.model.to(device)
 
 ##########################################################
-#### EXTERNAL ADDITION DONE TO GET LINZEN TESTED #########
+####  ADDITION DONE TO GET EXTERNAL TESTED #########
 ##########################################################
 	def test_ood(self, final_dict_testing):
 		final_dict_testing =  self.create_OOD_dataloader(final_dict_testing)
