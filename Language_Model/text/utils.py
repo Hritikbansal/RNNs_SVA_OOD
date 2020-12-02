@@ -17,8 +17,6 @@ def deps_to_tsv(deps, outfile):
     writer = csv.writer(open(outfile, 'w', encoding='utf-8'), delimiter='\t')
     writer.writerow(dependency_fields)
     for dep in deps:
-        print(dep)
-        sys.exit()
         writer.writerow([dep[key] for key in dependency_fields])
 
 
