@@ -29,10 +29,12 @@ Hence, we divide our repo into two subparts solely dedicated to these objectives
 
 If you find our work useful, then please consider citing us using:
 ```
-@article{bansal2020trained,
-author = {Hritik Bansal and Gantavya Bhatt and Sumeet Agarwal},
-title = {Can RNNs trained on harder subject-verb agreement instances still perform well on easier ones?},
-year = {2020},
-journal = {arXiv:2010.04976},
+@article{https://doi.org/10.7275/5bnr-wc78,
+  doi = {10.7275/5BNR-WC78},
+  url = {https://scholarworks.umass.edu/scil/vol4/iss1/38/},
+  author = {Bansal,  Hritik and Bhatt,  Gantavya and Agarwal,  Sumeet},
+  title = {Can RNNs trained on harder subject-verb agreement instances still perform well on easier ones?},
+  publisher = {University of Massachusetts Amherst},
+  year = {2021}
 }
 ```
