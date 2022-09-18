@@ -14,8 +14,8 @@ input_folder  =  sys.argv[1]
 deps={'type':[], 'sentence':[], 't_verb':[], 'f_verb':[], 'verb_index':[]}
 for f in os.listdir(input_folder):
     filename=str(f)
-    print(type(filename))
-    with open(os.path.join(filename, f), 'rb') as f:
+    print(filename)
+    with open(os.path.join(input_folder, filename), 'rb') as f: #modified from: with open(os.path.join(filename, f), 'rb') as f:
         c = pickle.load(f)
     for key in c.keys():
         count=0

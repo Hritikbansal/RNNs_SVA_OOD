@@ -113,14 +113,21 @@ class Agreement_model(nn.Module):
 		ground_truth = ground_truth.reshape(input_bsz,)
 		prediction = torch.argmax(output[:, -1, :], dim= -1).view(input_bsz, 1)
 
-		acc  = torch.sum(torch.eq(prediction, ground_truth.view(input_bsz, 1)))  # this accuracy is just the number of correct examples!!!  WATCH OUT! 
+		acc  = torch.sum(torch.eq(prediction, ground_truth.view(input_bsz, 1)))  # this accuracy is just the number of correct examples!!!  WATCH OUT!
+
+		# for indices of data with wrong predictions
+		incorr_indices = []
+		for index, pred in enumerate(prediction):
+			if prediction[index]!=ground_truth.view(input_bsz, 1)[index]:
+				incorr_indices.append(index)
+
 
 		if compute_loss:
-			loss = loss_func(output[:, -1, :], ground_truth)
+			loss = loss_func(output[:, -1, :], ground_truth.long())
 			if self.act_attention or self.max_attn:
 				return loss, output, prediction, acc, attention_weights[:, -1, :], h_n, h_last
 			else:
-				return loss, output, prediction, acc, h_n, h_last
+				return loss, incorr_indices, output, prediction, acc, h_n, h_last
 		else:
 			if self.act_attention or self.max_attn:
 				return output, prediction, acc, attention_weights[:, -1, :], h_n, h_last

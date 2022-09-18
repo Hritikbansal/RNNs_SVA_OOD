@@ -68,7 +68,7 @@ def train_opts(parser):
                         help="""If the norm of the gradient vector exceeds this,
                         renormalize it to have the norm equal to
                         max_grad_norm""")
-    parser.add_argument('-dropout', type=float, default=0.3,
+    parser.add_argument('-dropout', type=float, default=0.2,
                         help="Dropout probability; applied in LSTM stacks.")
     # learning rate
     parser.add_argument('-lr', type=float, default=0.001,

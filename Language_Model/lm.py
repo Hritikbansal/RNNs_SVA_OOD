@@ -6,6 +6,9 @@ import opts
 from text.dataset import Dataset
 import time
 import math
+import numpy as np
+
+#torch.cuda.empty_cache() 
 
 def log(message):
     with open('logs/' + 'output.txt', 'a') as file:
@@ -16,13 +19,13 @@ parser = argparse.ArgumentParser(description='Language Model')
 
 parser.add_argument('-train', required=True, default='train.txt', type=str,
                     help='train file, one sentence per line.')
-parser.add_argument('-valid', required=True, default='valid.txt', type=str,
-                    help='validation file.')
+#parser.add_argument('-valid', required=True, default='valid.txt', type=str,
+ #                   help='validation file.')
 parser.add_argument('--rnn_arch', type=str, default='LSTM', 
                     help="Type of RNN architcture to be chosen from LSTM, GRU, ONLSTM, DRNN")
-parser.add_argument('-num_units', required=True, default=10, type=int,
+parser.add_argument('-num_units', required=False, default=10, type=int,
                     help='hidden unit size')
-parser.add_argument('-k', required=True, default=5, type=int,
+parser.add_argument('-k', required=False, default=5, type=int,
                     help='hidden unit size')
 parser.add_argument('--activation', default='tanh', type=str, 
                     help='if to run DECAY RNN')
@@ -56,7 +59,7 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed(opt.seed)
 
 
-def prepare_batch(mb):
+def prepare_xy(mb):
     mb = mb.to(device)
     x = mb[:-1, :].clone()
     y = mb[1:, :].clone()
@@ -75,7 +78,7 @@ def eval(model, valid, crit):
     valid_nlls = []
     n_words = 0
     for i in range(len(valid)):
-        x, y = prepare_batch(valid[i])
+        x, y = prepare_xy(valid[i])
         log_prob, _ = model(x)
         nll = crit(log_prob, y)
         valid_nlls.append(nll.item())
@@ -88,19 +91,25 @@ def eval(model, valid, crit):
 def train(opt):
     print('| build data iterators')
     log('| build data iterators')
-    train = Dataset(opt.train, opt.dict, opt.batch_size, task='lm')
-    valid = Dataset(opt.valid, opt.dict, opt.batch_size, task='lm')
+    print('| training data iterators')
+    train = Dataset(opt.train, opt.dict, opt.batch_size, task='lm', dtype="train") ##
+    print('| validation data iterators')
+    valid = Dataset(opt.train, opt.dict, opt.batch_size, task='lm', dtype="valid") ##
+    #print(valid)
+    #print(len(valid.data))
+    #print(len(valid._data))
 
-    print('| build model')
+    print('| building model')
 
     log('| build model')
+    
     if opt.n_words < 0:
         opt.n_words = len(train.dict)
 
     print('| vocab size %d' % opt.n_words)
-    log('| build criterion')
+    #log('| build criterion')
 
-    print('| vocab size %d' % opt.n_words)
+    #print('| vocab size %d' % opt.n_words)
     log('| build criterion')
     crit = build_crit(opt.n_words)
 
@@ -140,12 +149,18 @@ def train(opt):
         model.train()
         tot_loss = 0
         n_words = 0
-        train.shuffle()
+        
+        # Preparing lists of lists as batches
+        train.prep_batch()
+        # batches of data stored in lists of lists: self._data
+        #print(len(train._data[0]))
+        
+        
         num_batches = len(train)
         ud_start = time.time()
         for i in range(len(train)):
             optimizer.zero_grad()
-            x, y = prepare_batch(train[i])
+            x, y = prepare_xy(train[i])
             log_prob, _ = model(x)
             loss = crit(log_prob, y)
             nx = y.data.ne(0).int().sum().item()

@@ -9,7 +9,7 @@ import torch.nn.functional as F
 
 
 class Dataset(object):
-    def __init__(self, tsv_file, vocab_file, batch_size=32, task='vp', no_unks=False, pos=False, pos_file=None):
+    def __init__(self, tsv_file, vocab_file, batch_size=32, task='vp', no_unks=False, pos=False, pos_file=None, dtype=None):
         self.batch_size = batch_size
         self.pos_dict = None
         if pos:
@@ -18,7 +18,21 @@ class Dataset(object):
 
         with open(vocab_file, 'rb') as f:
             self.dict = pkl.load(f)
-        deps = utils.deps_from_tsv(tsv_file)
+            
+        if dtype=="train": ##
+            deps = utils.deps_from_tsv(tsv_file)
+            lim = int(0.95*len(deps))
+            deps = deps[:lim]
+            print("Training size:"+str(len(deps)))
+        elif dtype=="valid": ##
+            deps = utils.deps_from_tsv(tsv_file)
+            lim = int(0.95*len(deps))
+            deps = deps[lim:]   
+            print("Validation size:"+str(len(deps)))   
+        else:
+            deps = utils.deps_from_tsv(tsv_file)  
+            print("test size:"+str(len(deps)))   
+            
         self.no_unks=no_unks
         self.task = task
         if task == 'vp':
@@ -26,8 +40,12 @@ class Dataset(object):
         elif task == 'pos':
             self.task_pos(deps)
         else:
+            
             self.task_lm(deps, no_unks)
-        self.shuffle()
+            # preprocessed sentences added in self.data
+            
+        self.prep_batch()
+        # batches of data stored in lists of lists: self._data
 
     def padding(self, input_, max_len):
         padding_mask = [(max_len - len(x),0) for x in input_]
@@ -43,23 +61,38 @@ class Dataset(object):
         assert index < self.num_batches
         return self._data[index]
 
-    def shuffle(self):
+    def prep_batch(self):
         if self.task == 'vp':
             self.shuffle_vp()
         elif self.task == 'pos':
             self.shuffle_pos()
         else:
-            self.shuffle_lm()
+            self.prep_batch_lm()
+            
+    def task_lm(self, deps, no_unks=False):
+        print(" Preprocessing sentences (word to index)")
+        self.data = []
+        for dep in deps:
+            xs = dep['sentence'].split()
+            xs = [self.dict.get(x, constants.unk_idx) for x in xs]
+            if constants.unk_idx in xs and no_unks:
+                continue
+            xs = [constants.bos_idx] + xs + [constants.eos_idx]
+            self.data += [xs]
 
-    def shuffle_lm(self):
-        random.shuffle(self.data)
+    def prep_batch_lm(self):
+        #random.shuffle(self.data)
+        print("Preparing batch for LM training")
         self._data = []
+        
         for i in range(0, len(self.data), self.batch_size):
             mb = self.data[i: i+self.batch_size]
             mb.sort(key=len, reverse=True)
             max_len = len(mb[0])
             mb =  self.padding(mb, max_len)  # left padding! 
             self._data += [mb]
+            #print(len(mb))
+        #print(self._data[0][0]))
 
         self.num_batches = len(self._data)
 
@@ -94,15 +127,6 @@ class Dataset(object):
 
         self.num_batches = len(self._data)
 
-    def task_lm(self, deps, no_unks=False):
-        self.data = []
-        for dep in deps:
-            xs = dep['sentence'].split()
-            xs = [self.dict.get(x, constants.unk_idx) for x in xs]
-            if constants.unk_idx in xs and no_unks:
-                continue
-            xs = [constants.bos_idx] + xs + [constants.eos_idx]
-            self.data += [xs]
 
     def task_pos(self, deps, no_unks=False):
         self.data = []
