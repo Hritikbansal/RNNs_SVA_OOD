@@ -21,6 +21,7 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 - For TSE data, please look Language model folder. 
 - For splitting and pre-processing the dataset, follow the following steps within the Language Model folder:
 1. python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --domain_adaptation  --compare_DA --K 0
+  
 This outputs the training file for Selective setting and the test file. The other settings should have the no. of training sentences as in this one. In our case, this number was 103360.
 2. python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360
 3. python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360 --intermediate
