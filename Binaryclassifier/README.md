@@ -15,6 +15,24 @@ We consider 4 RNN models in our work.
 * [ONLSTM](https://arxiv.org/abs/1810.09536) - Ordered Neuron LSTM
 * [DRNN](https://arxiv.org/abs/2005.08199) - Decay RNN 
 
+## Data
+
+```
+python run.py --train --fullGram --augment_train --augment_test --save_data
+```
+
+```
+python run.py --train --fullGram --augment_train --augment_test --train_file train_sel.tsv --domain_adaption --save_data
+```
+
+```
+python run.py --train --fullGram --augment_train --augment_test --train_file train_inter.tsv --intermediate --save_data
+```
+
+```
+python run.py --train --fullGram --augment_train --augment_test --train_file train_sel2.tsv --domain_adaption2 --save_data
+```
+
 ## Usage
 
 * Sample Usage 1 - If you want to train the models from scratch on Grammaticality Judgement task.
