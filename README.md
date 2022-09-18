@@ -24,21 +24,21 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 - For splitting and pre-processing the dataset, execute the following snippets within the Language Model folder. Last 10% of the dataset was reserved as the testing set which remains identical across all settings. Training and validation sets were sampled from the initial 90% sentences in the dataset.
 
 ```
-- python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --domain_adaptation  --compare_DA --K 0
+python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --domain_adaptation  --compare_DA --K 0
 ```
 
 This snippet will generate the training file for Selective setting and the test file. note the size of the training set, and the validation set, we need the same size for other settings. In our case, this number was 103360.
 
 ```
-- python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --train_size 103360
+python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --train_size 103360
 ```
 
 ```
-- python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --train_size 103360 --intermediate
+python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --train_size 103360 --intermediate
 ```
 
 ```
-- python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --train_size 103360 --domain_adaptation2
+python split_data.py -input "<location to agr_50_mostcommon_10K.tsv>" -out_folder expr_data -prop_train 0.90 --train_size 103360 --domain_adaptation2
 ```
 
 
