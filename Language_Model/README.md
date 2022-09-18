@@ -1,34 +1,9 @@
 # Code for understanding behavior of LM on different data
 
-## Data
-The data used in this paper is taken Linzen et al. 2016 [paper](https://arxiv.org/abs/1611.01368). This can either be downloaded from [here](http://tallinzen.net/media/rnn_agreement/agr_50_mostcommon_10K.tsv.gz) or alternatively, this can also be downloaded using the script ``` download_data.sh``` using ```./download_data.sh```. 
-
-Then split the data into train/dev/test to `expr_data` directory. In the paper, we chose to have the mentioned proportion of training data, so that it will be same for both the two subsets on which we performed experiments. 
-
 Points to be noted: 
 1. For the shorthand notation, throughout the code, we use K=-1 for the naturalistic sampling and K=0 for the selective sampling. 
-2. The random seed for splitting the dataset is 42. This can be changed from the code. 
-3. In our experiments, we used 0.85 as the proportion of training data (this doesn't mean the size of training data is 0.85 fraction of overall dataset, a subset of datapoints will be chosen from this fraction according to their attractor count.). Proportion of validation data is 0.05 (also a default value)
-4. By default (and what is reported in the paper), we split the data into two subsets according to the count of attractors to study domain adaptation. However, the same could be done using count of intervening nouns. Therefore, to do so, just add ```--n_intervening``` at the end of the following snippet. 
-5. Optional arguments are written in the brackets. 
-
-```
- python split_data.py -input <location to agr_50_mostcommon_10K.tsv> -out_folder expr_data -prop_train 0.85 (--prop_val 0.05) --domain_adaptation  --compare_DA --K 0 ( --n_intervening )
-
-```
-
-After splitting the data for K=0, note the size of the training set, and the validation set. We need the same size for K=-1. Following snippet will generate data for K=-1. Note, the two experiment (K=0 and K=-1) should be done in different folders, so that one doesn't override the other. 
-
-```
- python split_data.py -input <location to agr_50_mostcommon_10K.tsv> -out_folder expr_data -prop_train 0.85 (--prop_val 0.05) --train_size <from K=-1> --validation_size <from K=-1> 
-```
-
-Create dictionary
-```
-$ python build_dictionary.py expr_data
-```
-This script will write a `vocab.pkl` file to `expr_data`
-
+2. The random seed for splitting the dataset is 40. This can be changed from the code. 
+3. By default (and what is reported in the paper), we split the data into two subsets according to the count of attractors to study domain adaptation. However, the same could be done using count of intervening nouns. Therefore, to do so, just add ```--n_intervening``` at the end of the following snippet. 
 
 ## Targeted Syntactic Evaluation template Construction 
 ```
