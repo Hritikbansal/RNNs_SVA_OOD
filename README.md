@@ -19,12 +19,14 @@ We used anaconda, and downloaded all the dependencies in an anaconda environment
 
 - The data used in this paper is taken Linzen et al. 2016 [paper](https://arxiv.org/abs/1611.01368). This can either be downloaded from [here](http://tallinzen.net/media/rnn_agreement/agr_50_mostcommon_10K.tsv.gz) or alternatively, this can also be downloaded using the script ``` download_data.sh``` (mentioned in the Language Model folder) using ```./download_data.sh```. 
 - For TSE data, please look Language model folder. 
-- For splitting and pre-processing the dataset, follow the following steps within the Language Model folder:
-1. This outputs the training file for Selective setting and the test file. The other settings should have the no. of training sentences as in this one. In our case, this number was 103360.
-python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --domain_adaptation  --compare_DA --K 0
-2. python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360
-3. python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360 --intermediate
-4. python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360 --domain_adaptation2
+- For splitting and pre-processing the dataset, follow the following steps within the Language Model folder.
+- python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --domain_adaptation  --compare_DA --K 0
+
+  This outputs the training file for Selective setting and the test file. The other settings should have the no. of training sentences as in this one. In our case, this number was 103360:
+
+- python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360
+- python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360 --intermediate
+- python split_data.py -input "<path to data>/agr_50_mostcommon_10K.tsv" -out_folder expr_data -prop_train 0.90 --train_size 103360 --domain_adaptation2
 
 
 - Build Vocab: 
