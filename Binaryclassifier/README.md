@@ -17,6 +17,8 @@ We consider 4 RNN models in our work.
 
 ## Data
 
+Following commands generate the data required for the Grammaticality Judgement task. Before running these commands, copy the data from the "expr_data" folder in Language Model to "data" in this folder.
+"domain_adaption" and "domain_adaption2" refer to Selective and Selective 2 setting, while "inter" refers to Intermediate setting.
 ```
 python run.py --train --fullGram --augment_train --augment_test --save_data
 ```
@@ -42,7 +44,7 @@ python run.py --model <RNN_ARCH> --train --fullGram (--<training setting>)
 
 1. RNN_ARCH is one from - {'LSTM', 'DECAY', 'GRU', 'ONLSTM'}
 2. <training setting> defines the training setting that is to be used, is one from - {domain_adaption, inter, domain_adaption2}
-NOTE: This argument is not required for Natural setting. And "domain_adaption" and "domain_adaption2" refer to Selective and Selective 2 setting, while "inter" refers to Intermediate setting.
+NOTE: This argument is not required for Natural setting.
 
 * If you want to test the trained models on Grammaticality Judgement task.
 ```
