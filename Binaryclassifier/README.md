@@ -35,31 +35,26 @@ python run.py --train --fullGram --augment_train --augment_test --train_file tra
 
 ## Usage
 
-* Sample Usage 1 - If you want to train the models from scratch on Grammaticality Judgement task.
+* If you want to train the models from scratch on Grammaticality Judgement task.
 ```
-python run.py --model LSTM --train --fullGram
+python run.py --model <RNN_ARCH> --train --fullGram (--<training setting>)
 ```
 
-* Sample Usage 2 - If you want to test the trained models on Grammaticality Judgement task.
+1. RNN_ARCH is one from - {'LSTM', 'DECAY', 'GRU', 'ONLSTM'}
+2. <training setting> defines the training setting that is to be used, is one from - {domain_adaption, inter, domain_adaption2}
+NOTE: This argument is not required for Natural setting. And "domain_adaption" and "domain_adaption2" refer to Selective and Selective 2 setting, while "inter" refers to Intermediate setting.
+
+* If you want to test the trained models on Grammaticality Judgement task.
 ```
-python run.py --model LSTM --fullGram 
+python run.py --model <RNN_ARCH> --fullGram --test_demarcated --validation_size 0
 ```
 
 The above two experiments can be conducted through the code we shared for our different paper which had similar experiments - [repo](https://github.com/bhattg/Decay-RNN-ACL-SRW2020)
 
-* Sample Usage 3 - For domain adaption experiment - Training on harder sentences - sentences with attractor >= 1
-```
-python run.py --model LSTM --train --fullGram --domain_adaption
-```
 
-* Sample Usage 4 - In our paper, we perform augmentation to the training data which doubles the amount of training data.
+* Generally, the trained models will give aggregated accuracy rather than an distribution of accuracy over number of intervening nouns and number of attractors in a sentence. To get the accuracy over this joint distribution, you can ```--demarcate``` functionality while getting testing numbers.
 ```
-python run.py --model LSTM --train --fullGram --augment_train <OPTIONAL --domain_adaption>
-```
-
-* Sample Usage 5 - Generally, the trained models will give aggregated accuracy rather than an distribution of accuracy over number of intervening nouns and number of attractors in a sentence. To get the accuracy over this joint distribution, you can ```--demarcate``` functionality while getting testing numbers.
-```
-python run.py --model LSTM --fullGram --test_demarcated
+python run.py --model <RNN_ARCH> --fullGram --test_demarcated --validation_size 0
 ```
 
 * In our case ```run.py``` has ```load_data = True``` because we had saved the shuffled data in a folder, and were reusing it again during training rather than having to create the data from scratch again. We would recommend you to first run the code with ```load_data = False``` and save the constructed data somewhere.
