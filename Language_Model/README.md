@@ -29,10 +29,11 @@ However, this codebase is not just limited to the mentioned architectures, but i
 
 Make sure you have folder save_model/. To train the networks mentioned in the paper:
 ```
- python lm.py -train expr_data/train.tsv -valid expr_data/valid.tsv -seed 20 -dict expr_data/vocab.pkl -word_vec_size 200 -hidden_size 650  -optim adam -layers 2 -epochs 100 -batch_size 128 -n_words -1 -save_model save_model/lm_rnn.pt -lr 0.001 --rnn_arch <RNN_ARCH> --activation tanh 
+python lm.py -train expr_data/<train_file> -seed 20 -dict expr_data/vocab.pkl -word_vec_size 200 -hidden_size 650  -optim adam -layers 2 -epochs 100 -batch_size 128 -n_words -1 -save_model save_model/lstm_nat.pt -lr 0.001 --rnn_arch <RNN_ARCH> (--activation tanh)
 ```
 1. RNN_ARCH is one from - {'LSTM', 'DRNN', 'GRU', 'ONLSTM'}
-2. The term --activation tanh is only needed while training Decay RNN (DRNN). DRNN by default uses tanh, however relu can also be used. 
+2. <train_file> defines the training setting that is to be used, is one from - {train_nat.tsv, train_sel.tsv, train_inter.tsv, train_sel2.tsv}
+3. The term --activation tanh is only needed while training Decay RNN (DRNN). DRNN by default uses tanh, however relu can also be used. 
 
 If you want to train recurrent independent mechanisms, note the following first:
 1. RIM can only be trained with LSTM/GRU at the moment.
@@ -40,7 +41,7 @@ If you want to train recurrent independent mechanisms, note the following first:
 3. Note that, for a RIM to work the size of hidden units should be divisible by num_units. 
 
 ```
- python lm.py -train expr_data/train.tsv -valid expr_data/valid.tsv -seed 20 -dict expr_data/vocab.pkl -word_vec_size 200 -hidden_size 650  -optim adam -layers 2 -epochs 100 -batch_size 128 -n_words -1 -save_model save_model/lm_rim.pt -lr 0.001 --rnn_arch LSTM -arch RIM -num_units 5 -k 3
+ python lm.py -train expr_data/<train_file> -seed 20 -dict expr_data/vocab.pkl -word_vec_size 200 -hidden_size 650  -optim adam -layers 2 -epochs 100 -batch_size 128 -n_words -1 -save_model save_model/lm_rim.pt -lr 0.001 --rnn_arch LSTM -arch RIM -num_units 5 -k 3
 ```
 
 If want to use transformer network, use -arch fan and -num_head to specify number of attention heads. Also, occasionally if the size of hidden units is same as that of word vector size, then one can use -tied to tie the weights (often works as a regularizer).
@@ -48,7 +49,7 @@ If want to use transformer network, use -arch fan and -num_head to specify numbe
 ### Testing
 To test the trained model on the natural testing set:
 ```
-python full_eval_lm.py  -checkpoint save_models/lm_rnn.pt -input expr_data/test.tsv -output o.pkl -batch_size 512 --rnn_arch LSTM --get_hidden
+python full_eval_lm.py  -checkpoint save_model/<name_of_saved_model>.pt -input expr_data/test.tsv -output o.pkl -batch_size 512 --rnn_arch LSTM --get_hidden
 ```
 This will give the results demarcated with different number of attractors and intervening noun pairs, accuracy with increasing distance between the main noun and main verb (although not used in the paper). --get_hidden will save 2000 hidden units to be used for RSA. 
 
