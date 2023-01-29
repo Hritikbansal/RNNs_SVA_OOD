@@ -51,7 +51,7 @@ To test the trained model on the natural testing set:
 ```
 python full_eval_lm.py  -checkpoint save_model/<name_of_saved_model>.pt -input expr_data/test.tsv -output o.pkl -batch_size 512 --rnn_arch LSTM --get_hidden
 ```
-This will give the results demarcated with different number of attractors and intervening noun pairs, accuracy with increasing distance between the main noun and main verb (although not used in the paper). --get_hidden will save 2000 hidden units to be used for RSA. 
+This will give the results demarcated with different number of attractors, by default. To get results demarcated with different number of attractors and intervening noun pairs, uncomment line 225. It also gives accuracy with increasing distance between the main noun and main verb (although not used in the paper). --get_hidden will save 2000 hidden units to be used for RSA. 
 
 ### Testing Synthetic sentences... 
 
