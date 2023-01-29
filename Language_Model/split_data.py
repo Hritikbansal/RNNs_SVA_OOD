@@ -15,8 +15,8 @@ parser.add_argument('-out_folder', required=True, type=str,
 
 parser.add_argument('-prop_train', required=True, default=0.1, type=float,
                     help='proportion of training examples!')
-parser.add_argument('--prop_val', default=0.05, type=float,
-                    help='proportion of validation examples!')
+#parser.add_argument('--prop_val', default=0.05, type=float,
+ #                   help='proportion of validation examples!')
 
 parser.add_argument('--mixup_ratio', default=0.5, type=float,
                     help='proportion of mixup examples!')
@@ -31,10 +31,16 @@ parser.add_argument('--test_size', default=7000, type=int,
                     help='size for testing the data. Default is 7k corresponding to the validation split.')
 
 parser.add_argument('--domain_adaptation', action='store_true',
-                    help='If doing domain adaptation testing!')
+                    help='selective setting data!')
+                    
+parser.add_argument('--domain_adaptation2', action='store_true',
+                    help='selective setting data based on number of intervening nouns!')
+                    
+parser.add_argument('--intermediate', action='store_true',
+                    help='If doing intermediate experiment!')
 
 parser.add_argument('--compare_DA', action='store_true',
-                    help='If preparing the representatinos for the graph!')
+                    help='selective setting!')
 
 parser.add_argument('--K', default=1, type=int,
                     help='K value in the domain adaptation')
@@ -53,7 +59,7 @@ parser.add_argument('--j', default=0, type=int, help=
 
 args = parser.parse_args()
 
-random.seed(42)
+random.seed(40)
 
 prop_train = args.prop_train  # proportion of the data used for training
 
@@ -78,7 +84,7 @@ def mixup(train, test, args, criteria):
     for j in range(i, len(test)):
         test_ind_list.append(j)
     train =  train  + get_indices(test, train_ind_list)
-    random.seed(42)
+    random.seed(40)
     random.shuffle(train)
     test =  get_indices(test, test_ind_list)
     return train, test
@@ -93,16 +99,43 @@ def prepare(fname, expr_dir):
     print('| read in the data')
     data = deps_from_tsv(fname)
     print('| shuffling')
-    random.seed(42)
+    
+    random.seed(40)
     random.shuffle(data)
+    
+    count0 = 0 #
+    count1 = 0 #
+    count2 = 0 #
+    count3 = 0 #
+    count3p = 0 #
+    
     n_train = int(len(data) * prop_train)
-    n_valid = int(len(data) * args.prop_val)
-    train = data[:n_train]
-    valid = data[n_train:n_train+n_valid]
-    test = data[n_train+n_valid:]  # To keep the testing examples same. 
-
-    valid=valid[:args.validation_size] # This is used in the ns case in our domain adaptation. 
+    #n_valid = int(len(data) * args.prop_val)
+    
+    train = data[:n_train] 
+    #valid = data[n_train:n_train+n_valid+1]
+    test = data[n_train:]  # To keep the testing examples same. 
+    
     train=train[:args.train_size]
+    #valid=valid[:args.validation_size] # This is used in the ns case in our domain adaptation. 
+    
+    criteria = 'n_diff_intervening'
+    for i in range(len(train)):
+        if train[i][criteria]==0:
+            count0+=1
+            
+        elif train[i][criteria]==1:
+            count1+=1
+                    
+        elif train[i][criteria]==2:
+            count2+=1
+            
+        elif train[i][criteria]==3:
+            count3+=1
+        
+        elif train[i][criteria]>3:
+            count3p+=1
+    
     try:
         os.mkdir(expr_dir)
     except OSError as exc:
@@ -111,12 +144,113 @@ def prepare(fname, expr_dir):
         pass
     print('| splitting')
     print('{} size {}'.format('Train', len(train)))
-    print('{} size {}'.format('valid', len(valid)))
+    
+    print("number of sentences with zero attractor:"+str(count0))
+    print("percentage of sentences with zero attractor:"+str(count0/len(train)))
+    print("number of sentences with one attractor:"+str(count1))
+    print("percentage of sentences with one attractor:"+str(count1/len(train)))
+    print("number of sentences with two attractor:"+str(count2))
+    print("percentage of sentences with two attractor:"+str(count2/len(train)))
+    print("number of sentences with three attractor:"+str(count3))
+    print("percentage of sentences with three attractor:"+str(count3/len(train)))
+    print("number of sentences with >three attractor:"+str(count3p))
+    print("percentage of sentences with >three attractor:"+str(count3p/len(train)))
+    
+    #print('{} size {}'.format('valid', len(valid)))
     print('{} size {}'.format('Test', len(test)))
-    deps_to_tsv(train, os.path.join(expr_dir, 'train.tsv'))
-    deps_to_tsv(valid, os.path.join(expr_dir, 'valid.tsv'))
+    deps_to_tsv(train, os.path.join(expr_dir, 'train_nat.tsv'))
+    #deps_to_tsv(valid, os.path.join(expr_dir, 'valid_nat.tsv'))
     deps_to_tsv(test, os.path.join(expr_dir, 'test.tsv'))
     print('| done!')
+    
+    
+def prepare_intermediate(fname, expr_dir):
+    print('| read in the data')
+    data = deps_from_tsv(fname)
+    print('| shuffling')
+    
+    random.seed(40)
+    random.shuffle(data)
+    
+    count0 = 0 #
+    count1 = 0 #
+    count2 = 0 #
+    count3 = 0 #
+    count3p = 0 #
+    
+    n_train = int(len(data) * prop_train)
+    #n_valid = int(len(data) * args.prop_val)
+    
+    #train = data[:n_train] 
+    #valid = data[n_train:n_train+n_valid+1]
+    test = data[n_train:]  # To keep the testing examples same. 
+    
+    #train=train[:args.train_size]
+    train_indices = []
+    #valid=valid[:args.validation_size] # This is used in the ns case in our domain adaptation. 
+    
+    criteria = 'n_diff_intervening'
+    for i in range(n_train):
+    
+        if len(train_indices)<args.train_size:
+        
+            if data[i][criteria]==0:
+                if count0<47959:  # intermediate setting -> 92.8/2%=0.464 x 103360 = 47,959 are 0 attractor sentences
+                    train_indices.append(i)
+                    count0+=1
+                else:
+                    continue
+                
+                
+            elif data[i][criteria]==1:
+                train_indices.append(i)
+                count1+=1
+                        
+            elif data[i][criteria]==2:
+                train_indices.append(i)
+                count2+=1
+                
+            elif data[i][criteria]==3:
+                train_indices.append(i)
+                count3+=1
+            
+            elif data[i][criteria]>3:
+                train_indices.append(i)
+                count3p+=1
+                
+        else:
+            break
+            
+    train = get_indices(data, train_indices) 
+        
+    try:
+        os.mkdir(expr_dir)
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+        pass
+    print('| splitting')
+    print('{} size {}'.format('Train', len(train)))
+    
+    print("number of sentences with zero attractor:"+str(count0))
+    print("percentage of sentences with zero attractor:"+str(count0/len(train)))
+    print("number of sentences with one attractor:"+str(count1))
+    print("percentage of sentences with one attractor:"+str(count1/len(train)))
+    print("number of sentences with two attractor:"+str(count2))
+    print("percentage of sentences with two attractor:"+str(count2/len(train)))
+    print("number of sentences with three attractor:"+str(count3))
+    print("percentage of sentences with three attractor:"+str(count3/len(train)))
+    print("number of sentences with >three attractor:"+str(count3p))
+    print("percentage of sentences with >three attractor:"+str(count3p/len(train)))
+    
+    #print('{} size {}'.format('valid', len(valid)))
+    print('{} size {}'.format('Test', len(test)))
+    deps_to_tsv(train, os.path.join(expr_dir, 'train_inter.tsv'))
+    #deps_to_tsv(valid, os.path.join(expr_dir, 'valid_inter.tsv'))
+    #deps_to_tsv(test, os.path.join(expr_dir, 'test.tsv'))
+    print('| done!')
+    
+                        
 
 
 # def prepare_DA(fname, expr_dir):
@@ -190,26 +324,50 @@ def prepare_compare_DA(fname, expr_dir):
     data = deps_from_tsv(fname)
     print('| shuffling')
     print("| Domain adaptation!")
-    random.seed(42)
+    
+    count0 = 0 #
+    count1 = 0 #
+    count2 = 0 #
+    count3 = 0 #
+    count3p = 0 #
+            
+    random.seed(40)      
     random.shuffle(data)
     criteria = 'n_intervening' if args.n_intervening else 'n_diff_intervening'
     print(criteria)
     n_train = int(len(data) * prop_train)
-    n_valid = int(len(data)*args.prop_val)
+    #n_valid = int(len(data)*args.prop_val)
 
     train_indices=[]
     for i in range(n_train):
         if data[i][criteria] > args.K:
-            train_indices.append(i)
+                if data[i][criteria]==1:
+                    train_indices.append(i)
+                    count1+=1
+                    
+                elif data[i][criteria]==2:
+                    train_indices.append(i)
+                    count2+=1
+                    
+                elif data[i][criteria]==3:
+                    train_indices.append(i)
+                    count3+=1
+                
+                elif data[i][criteria]>3:
+                    train_indices.append(i)
+                    count3p+=1
+                     
     train= get_indices(data, train_indices) 
+            
+            
 
-    validation_indices =[]
-    for j in range(n_train, n_valid+n_train):  #see only in the remaining set of examples. 
-        if data[j][criteria] > args.K:
-            validation_indices.append(j)
-    valid =  get_indices(data, validation_indices)
+    #validation_indices =[]
+    #for j in range(n_train, n_valid+n_train+1):  #see only in the remaining set of examples. 
+    #    if data[j][criteria] >0:
+    #        validation_indices.append(j)
+    #valid =  get_indices(data, validation_indices)
  
-    test = data[n_train+n_valid:] # use all the last ones for the testing. 
+    test = data[n_train:] # use all the last ones for the testing. 
 
     try:
         os.mkdir(expr_dir)
@@ -217,14 +375,105 @@ def prepare_compare_DA(fname, expr_dir):
         if exc.errno != errno.EEXIST:
             raise
         pass
-
+    
+    #print("random state " + str(r))
     print('Length of training sentences is {}'.format(len(train)))
-    print('Length of validation sentences is {}'.format(len(valid)))
+    
+    print("number of sentences with zero attractor:"+str(count0))
+    print("percentage of sentences with zero attractor:"+str(count0/len(train_indices)))
+    print("number of sentences with one attractor:"+str(count1))
+    print("percentage of sentences with one attractor:"+str(count1/len(train_indices)))
+    print("number of sentences with two attractor:"+str(count2))
+    print("percentage of sentences with two attractor:"+str(count2/len(train_indices)))
+    print("number of sentences with three attractor:"+str(count3))
+    print("percentage of sentences with three attractor:"+str(count3/len(train_indices)))
+    print("number of sentences with >three attractor:"+str(count3p))
+    print("percentage of sentences with >three attractor:"+str(count3p/len(train_indices)))
+            
+    #print('Length of validation sentences is {}'.format(len(valid)))
     print('Lenght of testing sentences is {}'.format(len(test)))
     print('| splitting')
-    deps_to_tsv(train, os.path.join(expr_dir, 'train.tsv'))
-    deps_to_tsv(valid, os.path.join(expr_dir, 'valid.tsv'))
-    deps_to_tsv(test, os.path.join(expr_dir, 'test.tsv'))
+    deps_to_tsv(train, os.path.join(expr_dir, 'train_sel.tsv'))
+    #deps_to_tsv(valid, os.path.join(expr_dir, 'valid_sel.tsv'))
+    #deps_to_tsv(test, os.path.join(expr_dir, 'test.tsv'))
+    print('| done!')
+    
+    
+def prepare_compare_DA2(fname, expr_dir):
+    print('| read in the data')
+    data = deps_from_tsv(fname)
+    print('| shuffling')
+    
+    random.seed(40)
+    random.shuffle(data)
+    
+    count0 = 0 #
+    count1 = 0 #
+    count2 = 0 #
+    count3 = 0 #
+    count3p = 0 #
+    
+    n_train = int(len(data) * prop_train)
+    #n_valid = int(len(data) * args.prop_val)
+    
+    test = data[n_train:]  # To keep the testing examples same. 
+    
+    #train=train[:args.train_size]
+    train_indices = []
+    
+    criteria = 'n_intervening'
+    for i in range(n_train):
+    
+        if len(train_indices)<args.train_size:
+        
+            if data[i][criteria]==0:
+                continue
+                
+                
+            elif data[i][criteria]==1:
+                train_indices.append(i)
+                count1+=1
+                        
+            elif data[i][criteria]==2:
+                train_indices.append(i)
+                count2+=1
+                
+            elif data[i][criteria]==3:
+                train_indices.append(i)
+                count3+=1
+            
+            elif data[i][criteria]>3:
+                train_indices.append(i)
+                count3p+=1
+                
+        else:
+            break
+            
+    train = get_indices(data, train_indices) 
+        
+    try:
+        os.mkdir(expr_dir)
+    except OSError as exc:
+        if exc.errno != errno.EEXIST:
+            raise
+        pass
+    #print('| splitting')
+    print('{} size {}'.format('Train', len(train)))
+    
+    print("number of sentences with zero intervening nouns:"+str(count0))
+    print("percentage of sentences with zero intervening nouns:"+str(count0/len(train)))
+    print("number of sentences with one intervening nouns:"+str(count1))
+    print("percentage of sentences with one intervening nouns:"+str(count1/len(train)))
+    print("number of sentences with two intervening nouns:"+str(count2))
+    print("percentage of sentences with two intervening nouns:"+str(count2/len(train)))
+    print("number of sentences with three intervening nouns:"+str(count3))
+    print("percentage of sentences with three intervening nouns:"+str(count3/len(train)))
+    print("number of sentences with >three intervening nouns:"+str(count3p))
+    print("percentage of sentences with >three intervening nouns:"+str(count3p/len(train)))
+    
+    #print('{} size {}'.format('valid', len(valid)))
+    print('{} size {}'.format('Test', len(test)))
+    deps_to_tsv(train, os.path.join(expr_dir, 'train_sel2.tsv'))
     print('| done!')
 
 
@@ -234,6 +483,12 @@ if __name__ == '__main__':
             prepare_compare_DA(args.input, args.out_folder)
         # else:
         #     prepare_DA(args.input, args.out_folder)     # This method is not used in the paper, so this can be safely ignored! 
+    elif args.intermediate:
+        prepare_intermediate(args.input, args.out_folder)
+        
+    elif args.domain_adaptation2:
+        prepare_compare_DA2(args.input, args.out_folder)
+        
     else:
         prepare(args.input, args.out_folder)
 

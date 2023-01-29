@@ -5,8 +5,8 @@ class AgreementTemplate():
                       'obj_rel_across_inanim': (['D', 'IS', 'IC', 'D', 'ES', 'EV', 'IV'], {'match': ([1],[6]), 'vary':[4,5]}),
                       'obj_rel_within_inanim': (['D', 'IS', 'IC', 'D', 'ES', 'EV', 'IV'], {'match': ([4],[5]), 'vary':[1,6]}),
                       'subj_rel': (['D', 'MS', 'C', 'EV', 'D', 'ES', 'MV'], {'match':([1,3],[6]), 'vary': [5]}),
-                      'prep_anim': (['D', 'MS', 'P', 'D', 'ES', 'MV'], {'match':([1],[5]), 'vary':[4]}),
-                      'prep_inanim': (['D', 'IS', 'IP', 'D', 'ES', 'IV'], {'match':([1],[5]), 'vary':[4]}),
+                      'prep_anim': (['D', 'MS', 'P', 'D', 'ES', 'MV'], {'match':([1],[5]), 'vary':[1]}), #changed vary to 1 from 4
+                      'prep_inanim': (['D', 'IS', 'IP', 'D', 'ES', 'IV'], {'match':([1],[5]), 'vary':[1]}), # changed vary to 1 from 4
                       'obj_rel_no_comp_across_anim': (['D', 'MS', 'D', 'ES', 'EV', 'MV'], {'match':([1],[5]), 'vary':[3,4]}),
                       'obj_rel_no_comp_within_anim': (['D', 'MS', 'D', 'ES', 'EV', 'MV'], {'match':([3],[4]), 'vary':[1,5]}),
                       'obj_rel_no_comp_across_inanim': (['D', 'IS', 'D', 'ES', 'EV', 'IV'], {'match':([1],[5]), 'vary':[3,4]}),
