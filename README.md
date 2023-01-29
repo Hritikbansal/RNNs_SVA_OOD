@@ -48,6 +48,21 @@ $ python build_dictionary.py expr_data
 ```
 This script will write a `vocab.pkl` file to `expr_data`
 
+## Accuracy Variation Plot and Qualitative Analyses
+
+Use the script acc_variation_plot.py to plot accuracies variations over interveners x attractors. 
+Do make sure:
+1. To set your own "model_save_dir" at the beginning of the script.
+2. "full_eval_lm.py" (in case of LM) and "decay_rnn_model.py" (in case of BC), upon testing, save "Interveners x attractors acc dictionary" as pickle file, whose moniker is of the form '<>_intdiff_acc.pickle'. These need to be in appropriate directories, following structure of: model_save_dir -> train_task -> train_setting -> model_name
+
+For qualitative analyses, use the corresponding script "qualitative_analysis.py" in the following way. 
+Choose <model_name> from ["lstm", "onlstm", "gru", "drnn"]
+Do make sure:
+1. To set your own "model_save_dir" at the beginning of the script.
+2. The files containing incorrect prediction sentences "incorr.tsv" are in directory structure like: model_save_dir -> train_task -> train_setting -> model_name
+```
+python qualitative_analysis.py --model <model_name>
+```
 
 ## Experiments
 
