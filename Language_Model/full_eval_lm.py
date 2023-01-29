@@ -220,10 +220,9 @@ with torch.no_grad():
                     n0=">3"
                 if n1>3: #for accuracy over sentences with more than 3 attractors
                     n1=">3"
-        
-                #n = (n0, n1) #uncomment this and comment below for accuracy over interveners x attractors
-                
-                n = n1 
+        	
+		n = n1
+                #n = (n0, n1) #uncomment this and comment below for accuracy over interveners x attractors 
         
                 dif_tot[n] += 1
                 dif_hit[n] += v
